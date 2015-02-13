@@ -31,6 +31,9 @@ GLuint  Buffers[NumBuffers];
 
 const GLuint NumVertices = 6;
 
+int width = 512;
+int height = 512;
+
 //---------------------------------------------------------------------
 //
 // init
@@ -41,6 +44,15 @@ const GLuint NumVertices = 6;
 void init(void) {
     //glGenVertexArrays(NumVAOs, VAOs);
     //glBindVertexArray(VAOs[Triangles]);
+
+	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,100.0f);
+
+
+
+	glMatrixMode(GL_MODELVIEW);						// 选择模型观察矩阵
+
+	glLoadIdentity();
+
 
     // 我们首先指定了要渲染的两个三角形的位置信息.
     GLfloat  vertices[NumVertices][2] = {
@@ -89,7 +101,24 @@ void display(void) {
 
     // 2. 发起OpenGL调用来请求渲染你的对象
     //glBindVertexArray(VAOs[Triangles]);
+	//glLoadIdentity();
     glDrawArrays(GL_TRIANGLES, 0, NumVertices);
+
+	glBegin(GL_QUADS);						// 绘制正方形
+
+		glColor3f(1.0f,0.0f,0.0f);	
+		glVertex3f(-0.5f, 0.5f, 0.0f);				// 左上
+
+		glColor3f(1.0f,1.0f,0.0f);	
+		glVertex3f( 0.5f, 0.5f, 0.0f);				// 右上
+
+		glColor3f(1.0f,1.0f,1.0f);	
+		glVertex3f( 0.5f,-0.5f, 0.0f);				// 左下
+
+		glColor3f(1.0f,0.0f,1.0f);	
+		glVertex3f(-0.5f,-0.5f, 0.0f);				// 右下
+
+	glEnd();
 
     // 3. 请求将图像绘制到窗口
     glFlush();
@@ -108,7 +137,7 @@ void display(void) {
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA);
-    glutInitWindowSize(512, 512);
+	glutInitWindowSize(width, height);
     //glutInitContextVersion(4, 3);
     //glutInitContextProfile(GLUT_CORE_PROFILE);
     glutCreateWindow(argv[0]);
@@ -116,6 +145,7 @@ int main(int argc, char** argv) {
     //if (glewInit()) {
     //    cerr << "Unable to initialize GLEW ... exiting" << endl; exit(EXIT_FAILURE);
     //}
+
     init();
 
     glutDisplayFunc(display);
