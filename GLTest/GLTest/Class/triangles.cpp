@@ -45,13 +45,13 @@ void init(void) {
     //glGenVertexArrays(NumVAOs, VAOs);
     //glBindVertexArray(VAOs[Triangles]);
 
-	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,100.0f);
+	//gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,100.0f);
 
 
 
-	glMatrixMode(GL_MODELVIEW);						// 选择模型观察矩阵
+	//glMatrixMode(GL_MODELVIEW);						// 选择模型观察矩阵
 
-	glLoadIdentity();
+	//glLoadIdentity();
 
 
     // 我们首先指定了要渲染的两个三角形的位置信息.
@@ -97,33 +97,75 @@ void init(void) {
 
 void display(void) {
     // 1. 调用glClear()清空窗口
-    glClear(GL_COLOR_BUFFER_BIT);
+	glEnable(GL_DEPTH_TEST);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // 2. 发起OpenGL调用来请求渲染你的对象
     //glBindVertexArray(VAOs[Triangles]);
 	//glLoadIdentity();
-    glDrawArrays(GL_TRIANGLES, 0, NumVertices);
+    //glDrawArrays(GL_TRIANGLES, 0, NumVertices);
 
-	glBegin(GL_QUADS);						// 绘制正方形
+	//glBegin(GL_QUADS);						// 绘制正方形
 
-		glColor3f(1.0f,0.0f,0.0f);	
-		glVertex3f(-0.5f, 0.5f, 0.0f);				// 左上
+		//glColor3f(1.0f,0.0f,0.0f);	
+		//glVertex3f(-0.5f, 0.5f, 0.0f);				// 左上
 
-		glColor3f(1.0f,1.0f,0.0f);	
-		glVertex3f( 0.5f, 0.5f, 0.0f);				// 右上
+		//glColor3f(1.0f,1.0f,0.0f);	
+		//glVertex3f( 0.5f, 0.5f, 0.0f);				// 右上
 
-		glColor3f(1.0f,1.0f,1.0f);	
-		glVertex3f( 0.5f,-0.5f, 0.0f);				// 左下
+		//glColor3f(1.0f,1.0f,1.0f);	
+		//glVertex3f( 0.5f,-0.5f, 0.0f);				// 左下
 
-		glColor3f(1.0f,0.0f,1.0f);	
-		glVertex3f(-0.5f,-0.5f, 0.0f);				// 右下
+		//glColor3f(1.0f,0.0f,1.0f);	
+		//glVertex3f(-0.5f,-0.5f, 0.0f);				// 右下
 
-	glEnd();
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(75, 1, 1, 400000000);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(0,0, 0, 0, 0, 0, 0, 0, 1);
+
+	/*glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(75,1,1,400000000);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();*/
+	//gluLookAt(0,-200,0,0,0,0,0,0,1);
+	
+
+	int day = 200;
+
+	// 绘制红色的“太阳”
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glutSolidSphere(0, 100, 0);
+
+	// 绘制蓝色的“地球”
+	glColor3f(0.0f, 0.0f, 1.0f);
+	glRotatef(day/360.0*360.0, 0.0f, 0.0f, -1.0f);
+	glTranslatef(150000000, 0.0f, 0.0f);
+	glutSolidSphere(15945000, 20, 20);
+
+	// 绘制黄色的“月亮”
+	glColor3f(1.0f, 1.0f, 0.0f);
+	glRotatef(day/30.0*360.0 - day/360.0*360.0, 0.0f, 0.0f, -1.0f);
+	glTranslatef(38000000, 0.0f, 0.0f);
+	glutSolidSphere(4345000, 20, 20);
+
+	//glEnd();
 
     // 3. 请求将图像绘制到窗口
     glFlush();
 }
 
+void mydis(){
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	glRectf(-0.5f, -0.5f, 0.5f, 0.5f);
+
+	glFlush();
+
+}
 //---------------------------------------------------------------------
 //
 // main
@@ -135,23 +177,34 @@ void display(void) {
 //
 
 int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGBA);
-	glutInitWindowSize(width, height);
+   // glutInit(&argc, argv);
+   // glutInitDisplayMode(GLUT_RGBA);
+	//glutInitWindowSize(width, height);
     //glutInitContextVersion(4, 3);
     //glutInitContextProfile(GLUT_CORE_PROFILE);
-    glutCreateWindow(argv[0]);
+   // glutCreateWindow(argv[0]);
 
     //if (glewInit()) {
     //    cerr << "Unable to initialize GLEW ... exiting" << endl; exit(EXIT_FAILURE);
     //}
 
-    init();
+    //init();
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
+	glutInitWindowPosition(100, 100);
+	glutInitWindowSize(400, 400);
+	glutCreateWindow("第一个OpenGL程序");
+	//glutDisplayFunc(&myDisplay);
+	//glutMainLoo
 
     glutDisplayFunc(display);
 
+	//glutDisplayFunc(mydis);
+
     glutMainLoop();
 
-	printf("等待输入");
-	getchar();
+	return 0;
+
+	//printf("等待输入");
+	//getchar();
 }
