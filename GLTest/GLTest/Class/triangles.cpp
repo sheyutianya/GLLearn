@@ -33,6 +33,7 @@ const GLuint NumVertices = 6;
 
 int width = 512;
 int height = 512;
+static int day = 100;
 
 //---------------------------------------------------------------------
 //
@@ -100,11 +101,6 @@ void display(void) {
 	glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // 2. 发起OpenGL调用来请求渲染你的对象
-    //glBindVertexArray(VAOs[Triangles]);
-	//glLoadIdentity();
-    //glDrawArrays(GL_TRIANGLES, 0, NumVertices);
-
 	//glBegin(GL_QUADS);						// 绘制正方形
 
 		//glColor3f(1.0f,0.0f,0.0f);	
@@ -118,27 +114,21 @@ void display(void) {
 
 		//glColor3f(1.0f,0.0f,1.0f);	
 		//glVertex3f(-0.5f,-0.5f, 0.0f);				// 右下
+	//glEnd();
+
+	day++;
+	day = day % 360;
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(75, 1, 1, 400000000);
+	gluPerspective(75, 1, 10000, 400000000);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(0,0, 0, 0, 0, 0, 0, 0, 1);
-
-	/*glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(75,1,1,400000000);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();*/
-	//gluLookAt(0,-200,0,0,0,0,0,0,1);
-	
-
-	int day = 200;
+	gluLookAt(0,-200000000, 200000000, 0, 0, 0, 0, 0, 1);
 
 	// 绘制红色的“太阳”
 	glColor3f(1.0f, 0.0f, 0.0f);
-	glutSolidSphere(0, 100, 0);
+	glutSolidSphere(64800000, 20, 20);
 
 	// 绘制蓝色的“地球”
 	glColor3f(0.0f, 0.0f, 1.0f);
@@ -152,13 +142,12 @@ void display(void) {
 	glTranslatef(38000000, 0.0f, 0.0f);
 	glutSolidSphere(4345000, 20, 20);
 
-	//glEnd();
-
     // 3. 请求将图像绘制到窗口
     glFlush();
 }
 
 void mydis(){
+
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	glRectf(-0.5f, -0.5f, 0.5f, 0.5f);
@@ -176,35 +165,26 @@ void mydis(){
 // 这里我们使用的是GLUT和GLEW.
 //
 
+void timer(int p)
+{
+	glutPostRedisplay(); //marks the current window as needing to be redisplayed.
+	glutTimerFunc(200,timer,0);
+}
+
 int main(int argc, char** argv) {
-   // glutInit(&argc, argv);
-   // glutInitDisplayMode(GLUT_RGBA);
-	//glutInitWindowSize(width, height);
-    //glutInitContextVersion(4, 3);
-    //glutInitContextProfile(GLUT_CORE_PROFILE);
-   // glutCreateWindow(argv[0]);
-
-    //if (glewInit()) {
-    //    cerr << "Unable to initialize GLEW ... exiting" << endl; exit(EXIT_FAILURE);
-    //}
-
     //init();
+
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(400, 400);
 	glutCreateWindow("第一个OpenGL程序");
-	//glutDisplayFunc(&myDisplay);
-	//glutMainLoo
+    glutDisplayFunc(&display);
 
-    glutDisplayFunc(display);
 
-	//glutDisplayFunc(mydis);
+	glutTimerFunc(200,timer,0);
 
     glutMainLoop();
 
 	return 0;
-
-	//printf("等待输入");
-	//getchar();
 }
