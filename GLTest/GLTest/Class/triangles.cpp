@@ -15,8 +15,10 @@
 #include <iostream>
 using namespace std;
 
-#include "glut.h"
 //#include "gl/GL.h"
+#include "glew.h"
+
+#include "glut.h"
 
 //#include "LoadShaders.h"
 //#pragma comment (lib,"glut.lib")
@@ -34,6 +36,9 @@ const GLuint NumVertices = 6;
 int width = 512;
 int height = 512;
 static int day = 100;
+
+//staement
+void initMemory();
 
 //---------------------------------------------------------------------
 //
@@ -173,18 +178,25 @@ void timer(int p)
 
 int main(int argc, char** argv) {
     //init();
-
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(400, 400);
 	glutCreateWindow("第一个OpenGL程序");
+
+	initMemory();//init GL Memory 
+
     glutDisplayFunc(&display);
 
-
 	glutTimerFunc(200,timer,0);
-
     glutMainLoop();
 
 	return 0;
+}
+
+void initMemory()
+{
+	glGenVertexArrays(NumVAOs,VAOs);
+	glBindVertexArray(VAOs[Triangles]);
+	//glGen
 }
